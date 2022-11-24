@@ -1,16 +1,20 @@
 import { funded as fundedEvent } from "../generated/Fundme/Fundme"
 import { funded } from "../generated/schema"
+import { BigInt,Address} from "@graphprotocol/graph-ts"
 
 export function handlefunded(event: fundedEvent): void {
-  let entity = new funded(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.funder = event.params.funder
-  entity.amountFund = event.params.amountFund
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
 
-  entity.save()
+  let Funded = funded.load(getIdFromEventParams(event.params.amountFund, event.params.funder));
+  Funded.funder = event.params.funder
+  Funded.amountFund = event.params.amountFund
+
+  Funded.blockNumber = event.block.number
+  Funded.blockTimestamp = event.block.timestamp
+  Funded.transactionHash = event.transaction.hash
+
+  Funded.save()
+}
+function getIdFromEventParams(amountFund: BigInt, funder: Address): string {
+    return amountFund.toHexString() + funder.toHexString()
 }

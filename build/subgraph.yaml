@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Fundme
@@ -17,8 +17,8 @@ dataSources:
         - funded
       abis:
         - name: Fundme
-          file: ./abis/Fundme.json
+          file: Fundme\abis\Fundme.json
       eventHandlers:
         - event: funded(indexed address,uint256)
           handler: handlefunded
-      file: ./src/fundme.ts
+      file: Fundme\Fundme.wasm
